@@ -212,30 +212,17 @@ GPL-2.0, the license of LAMMPS (see `LICENSE`).
 
 ## Related publications
 
-1. Z. Chai, G. Li, P. A. Ndour, P. Connes, P. A. Buffet, M. Franco,
+1. Z. Chai, M. de Person, P. A. Buffet, M. Franco, G. E. Karniadakis.
+   Quantifying the biophysical properties of red blood cells in Gaucher
+   disease. Biophys. J. (2026). https://doi.org/10.1016/j.bpj.2026.10.021
+2. Z. Chai, G. Li, P. A. Ndour, P. Connes, P. A. Buffet, M. Franco,
    G. E. Karniadakis. In silico biophysics and rheology of blood and red
    blood cells in Gaucher Disease. PLOS Comput. Biol. 21, e1012705 (2025).
    https://doi.org/10.1371/journal.pcbi.1012705
-2. Z. Chai, N. Ahmadi Daryakenari, G. E. Karniadakis. A multiscale
-   signaling-biophysical framework reveals mechanisms of macrophage-mediated
-   RBC clearance in sickle cell and Gaucher disease. PNAS Nexus 5, pgag348
-   (2026). https://doi.org/10.1093/pnasnexus/pgag348
 3. Z. Chai, J. Zheng, H. Li, M. Dao, G. E. Karniadakis. Quantifying the
    biophysical properties of stomatocytes in health and disease. Biophys. J.
    (2026). https://doi.org/10.1016/j.bpj.2026.10.007
-4. Z. Chai, M. de Person, P. A. Buffet, M. Franco, G. E. Karniadakis.
-   Quantifying the biophysical properties of red blood cells in Gaucher
-   disease. Biophys. J. (2026). https://doi.org/10.1016/j.bpj.2026.10.021
-
-Preprints:
-
-5. J. D. Toscano, Z. Chai, G. E. Karniadakis. GRAFT-ATHENA: Self-improving
-   agentic teams for autonomous discovery and evolutionary numerical
-   algorithms. arXiv:2605.11117 (2026). https://arxiv.org/abs/2605.11117
-6. Z. Chai, J. Zheng, H. Li, M. Dao, G. E. Karniadakis. Quantifying
-   reticulocyte biomechanics in health and disease. arXiv:2607.21810 (2026).
-   https://arxiv.org/abs/2607.21810
-7. Z. Chai, J. Zheng, H. Li, M. Dao, G. E. Karniadakis. The typical red cell
-   makes too little vacuole material for coalescence to build the large
-   vacuoles of pocked cells. arXiv:2610.22646 (2026).
-   https://arxiv.org/abs/2610.22646
+4. Z. Chai, N. Ahmadi Daryakenari, G. E. Karniadakis. A multiscale
+   signaling-biophysical framework reveals mechanisms of macrophage-mediated
+   RBC clearance in sickle cell and Gaucher disease. PNAS Nexus 5, pgag348
+   (2026). https://doi.org/10.1093/pnasnexus/pgag348
