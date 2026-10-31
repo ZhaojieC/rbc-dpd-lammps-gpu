@@ -1,0 +1,59 @@
+# A red cell carried by pressure-driven flow between two walls 10 um apart.
+# A body force on the solvent drives the flow.  The cell starts as a disk
+# facing the flow and bends into a parachute as it is carried along the
+# middle of the channel, at about 1.5 mm/s.
+#
+#   python3 make_data.py
+#   lmp -k on g 1 -sf kk -pk kokkos newton on neigh half -in in.channel
+#   python3 analyze.py
+
+variable        f index 1.0                       # body force per solvent particle
+
+units           lj
+atom_style      molecular
+boundary        p p f
+read_data       channel.data
+
+bond_style      wlc/pow
+bond_coeff      1 2.2 120 2                       # lmax/l0  mu0  m
+angle_style     area/volume
+angle_coeff     1 4900 132.87 5000 92.45 100      # ka  A0  kv  V0  kd
+dihedral_style  bend
+dihedral_coeff  1 6.025 0                         # kb  theta0 (degrees)
+
+# types: 1 membrane, 2 solvent, 3 wall
+pair_style      dpd/ext 0.0707 1.5 19378
+pair_coeff      * * 4.0 40.0 0.0 0.15 0.15
+pair_coeff      1 2*3 0.0 47.9 0.0 0.2 0.2        # membrane-solvent and membrane-wall
+special_bonds   lj 0.0 0.0 0.0
+
+comm_modify     vel yes cutoff 3.0
+neighbor        0.3 bin
+neigh_modify    delay 0 every 1 check yes exclude type 3 3
+
+group           cell type 1
+group           solvent type 2
+group           mobile type 1 2
+velocity        mobile create 0.0707 11873 dist gaussian loop geom
+
+fix             nve mobile nve
+include         walls.inc
+fix             drive solvent addforce ${f} 0.0 0.0
+
+compute         shape all rbc/shape
+compute         tsolv solvent temp/profile 1 0 0 z 20
+variable        xc equal xcm(cell,x)
+variable        zc equal xcm(cell,z)
+variable        uc equal vcm(cell,x)
+thermo_style    custom step c_tsolv v_xc v_zc v_uc c_shape[1][1] c_shape[1][2] cpuremain
+thermo_modify   norm no flush yes
+thermo          2000
+timestep        0.001
+
+fix             out all print 1000 "$(step) $(v_xc:%.4f) $(v_zc:%.4f) $(v_uc:%.5f) $(c_shape[1][1]:%.3f) $(c_shape[1][2]:%.3f)" &
+                file cell.txt screen no title "# step x_center z_center u_cell area volume"
+dump            cell cell custom 2000 cell.lammpstrj id mol xu yu zu
+dump_modify     cell sort id
+
+run             100000
+write_restart   channel.restart

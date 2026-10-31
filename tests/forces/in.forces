@@ -1,0 +1,38 @@
+# Force checks for the membrane styles (no solvent).
+#
+#   lmp -in in.forces -var term bond  -var shift 0
+#
+# term = bond, angle, dihedral or all; shift = 0 or 9 (cell across the
+# periodic boundary).  The run stores the reference shape, moves the
+# vertices, and dumps the analytic force next to the finite-difference
+# derivative of the energy (fix numdiff).
+
+units           lj
+atom_style      molecular
+atom_modify     map array
+boundary        p p p
+read_data       cell.data
+displace_atoms  all move ${shift} 0 0
+
+if "${term} == bond || ${term} == all" then &
+  "bond_style wlc/pow" "bond_coeff 1 2.2 120 2" &
+else "bond_style zero" "bond_coeff *"
+if "${term} == angle || ${term} == all" then &
+  "angle_style area/volume" "angle_coeff 1 4900 132.87 5000 92.46 100" &
+else "angle_style zero" "angle_coeff *"
+if "${term} == dihedral || ${term} == all" then &
+  "dihedral_style bend" "dihedral_coeff 1 6.025 0" &
+else "dihedral_style zero" "dihedral_coeff *"
+
+pair_style      zero 1.5
+pair_coeff      * *
+comm_modify     cutoff 3.0
+
+thermo_style    custom step pe ebond eangle edihed
+run             0
+
+include         perturb_${shift}.inc
+fix             fd all numdiff 1 1.0e-5
+dump            d all custom 1 forces_${term}_${shift}.dump id fx fy fz f_fd[1] f_fd[2] f_fd[3]
+dump_modify     d sort id format float %.12g
+run             0

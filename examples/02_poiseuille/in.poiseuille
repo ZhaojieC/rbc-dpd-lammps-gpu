@@ -1,0 +1,45 @@
+# Poiseuille flow of DPD solvent between two walls, 10 um apart.
+# A body force f along x drives the flow; the fit of the velocity
+# profile gives the solvent viscosity (analyze.py).  No cell.
+#
+#   python3 make_data.py
+#   lmp -k on g 1 -sf kk -pk kokkos newton on neigh half -in in.poiseuille
+#   python3 analyze.py
+
+variable        f index 0.5                     # body force per particle
+
+units           lj
+atom_style      molecular
+boundary        p p f
+read_data       poiseuille.data
+
+# types: 1 membrane (not used here), 2 solvent, 3 wall
+pair_style      dpd/ext 0.0707 1.5 72631
+pair_coeff      * * 4.0 40.0 0.0 0.15 0.15
+
+comm_modify     vel yes cutoff 3.0
+neighbor        0.3 bin
+neigh_modify    delay 0 every 1 check yes exclude type 3 3
+
+group           solvent type 2
+group           wall type 3
+velocity        solvent create 0.0707 82710 dist gaussian loop geom
+
+# walls are frozen particles; bounce-back keeps the solvent out of them
+fix             nve solvent nve
+include         walls.inc
+fix             drive solvent addforce ${f} 0.0 0.0
+
+compute         tprof solvent temp/profile 1 0 0 z 20
+thermo_style    custom step c_tprof f_walls[1] f_walls[2] cpuremain
+thermo_modify   flush yes
+thermo          2000
+timestep        0.001
+
+run             20000
+reset_timestep  0
+
+# profiles across the channel, averaged over the next 30000 steps
+compute         slab solvent chunk/atom bin/1d z lower 0.25 units box
+fix             prof solvent ave/chunk 10 3000 30000 slab vx density/number file profile.txt
+run             30000

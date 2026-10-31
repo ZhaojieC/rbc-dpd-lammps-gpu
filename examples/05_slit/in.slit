@@ -1,0 +1,93 @@
+# A red cell pushed through a slit 1.2 um high and 5 um wide.
+# A force on every membrane vertex drives the cell; the solvent is not
+# driven.  The force follows the flow that would carry the cell: toward
+# the slit upstream of the plate and stronger close to it, then along x,
+# and weaker again past the slit.
+# The run stops when the whole cell has passed the plate.  See README.md.
+#
+#   python3 make_data.py
+#   lmp -k on g 1 -sf kk -pk kokkos newton on neigh half -in in.slit
+#   python3 analyze.py
+
+variable        f index 40                        # force per vertex (500 vertices)
+variable        boost index 3                     # the force grows to boost x f at the slit
+variable        w index 1.0                       # over the last w um before the plate
+variable        w2 index 2.0                      # and falls back to f over w2 um past it
+variable        nmax index 200000                 # step limit
+variable        x1 equal 12.0                     # plate faces and the center
+variable        x2 equal 14.5                     # of the slit in y and z, as
+variable        yc equal 6.0                      # in make_data.py
+variable        zc equal 6.5
+
+units           lj
+atom_style      molecular
+boundary        p p f
+read_data       slit.data
+
+bond_style      wlc/pow
+bond_coeff      1 2.2 120 2                       # lmax/l0  mu0  m
+angle_style     area/volume
+angle_coeff     1 4900 132.87 5000 92.45 100      # ka  A0  kv  V0  kd
+dihedral_style  bend
+dihedral_coeff  1 6.025 0                         # kb  theta0 (degrees)
+
+# types: 1 membrane, 2 solvent, 3 wall
+pair_style      dpd/ext 0.0707 1.5 52411
+pair_coeff      * * 4.0 40.0 0.0 0.15 0.15
+pair_coeff      1 2 0.0 47.9 0.0 0.2 0.2          # membrane-solvent
+pair_coeff      1 3 0.0 0.0 0.0 0.2 0.2           # membrane-wall: no drag
+special_bonds   lj 0.0 0.0 0.0
+
+comm_modify     vel yes cutoff 3.0
+neighbor        0.3 bin
+neigh_modify    delay 0 every 1 check yes exclude type 3 3
+
+group           cell type 1
+group           solvent type 2
+group           mobile type 1 2
+velocity        mobile create 0.0707 39116 dist gaussian loop geom
+
+fix             nve mobile nve
+include         walls.inc
+
+compute         shape all rbc/shape
+compute         tsolv solvent temp
+compute         xu cell property/atom xu
+compute         yu cell property/atom yu
+compute         front cell reduce max c_xu
+compute         rear cell reduce min c_xu
+variable        xc equal xcm(cell,x)
+
+# force on each vertex: g f toward the middle of the slit upstream of the
+# plate, g f along x from the slit entrance on.  g grows from 1 at w um
+# before the plate to boost at the entrance, as the flow speeds up toward
+# the slit, and falls back to 1 over w2 um past the slit, as the flow
+# slows down again (a and b are kept within 0..1).
+variable        dx atom 0.5*(v_x1+v_x2)-c_xu
+variable        dy atom v_yc-c_yu
+variable        dz atom v_zc-z
+variable        r atom sqrt(v_dx*v_dx+v_dy*v_dy+v_dz*v_dz+0.01)
+variable        up atom c_xu<v_x1
+variable        a atom (c_xu-v_x1+v_w)/v_w
+variable        b atom (c_xu-v_x2)/v_w2
+variable        g atom 1+(v_boost-1)*(v_a*(v_a>0)*(v_a<1)+(v_a>=1)-v_b*(v_b>0)*(v_b<1)-(v_b>=1))
+variable        fx atom v_f*v_g*(v_up*v_dx/v_r+1-v_up)
+variable        fy atom v_f*v_g*v_up*v_dy/v_r
+variable        fz atom v_f*v_g*v_up*v_dz/v_r
+fix             push cell addforce v_fx v_fy v_fz
+
+variable        rear equal c_rear
+thermo_style    custom step c_tsolv v_xc c_shape[1][1] c_shape[1][2] f_walls[2] cpuremain
+thermo_modify   norm no flush yes
+thermo          2000
+timestep        0.001
+
+fix             out all print 1000 "$(step) $(v_xc:%.4f) $(c_front:%.4f) $(c_rear:%.4f) $(c_shape[1][1]:%.3f) $(c_shape[1][2]:%.3f)" &
+                file cell.txt screen no title "# step x_center x_front x_rear area volume"
+dump            cell cell custom 1000 cell.lammpstrj id mol xu yu zu
+dump_modify     cell sort id
+
+# stop when the whole cell is 0.5 um past the plate (downstream face x = 14.5)
+fix             stop all halt 1000 v_rear > 15.0 error continue
+run             ${nmax}
+write_restart   slit.restart

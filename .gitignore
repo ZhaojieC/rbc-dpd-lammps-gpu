@@ -1,0 +1,15 @@
+# LAMMPS sources and build tree made by build.sh
+/lammps/
+/build/
+
+# files written by the examples and tests
+*.data
+*.lammpstrj
+*.restart
+log.lammps
+log.cite
+walls.inc
+examples/*/*.txt
+tests/forces/*.dump
+tests/forces/perturb_*.inc
+__pycache__/
