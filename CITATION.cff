@@ -1,0 +1,35 @@
+cff-version: 1.2.0
+message: "If you use this code, please cite the article below."
+title: "rbc-dpd-lammps-gpu: a red blood cell model for LAMMPS on one GPU"
+type: software
+authors:
+  - family-names: Chai
+    given-names: Zhaojie
+    affiliation: Brown University
+    orcid: "https://orcid.org/0000-0001-6571-247X"
+repository-code: "https://github.com/ZhaojieC/rbc-dpd-lammps-gpu"
+license: GPL-2.0
+keywords:
+  - red blood cell
+  - cell membrane
+  - dissipative particle dynamics
+  - LAMMPS
+  - KOKKOS
+  - GPU
+preferred-citation:
+  type: article
+  title: "Quantifying the biophysical properties of red blood cells in Gaucher disease"
+  authors:
+    - family-names: Chai
+      given-names: Zhaojie
+    - family-names: de Person
+      given-names: Marine
+    - family-names: Buffet
+      given-names: Pierre A.
+    - family-names: Franco
+      given-names: Melanie
+    - family-names: Karniadakis
+      given-names: George Em
+  journal: "Biophysical Journal"
+  year: 2026
+  doi: 10.1016/j.bpj.2026.10.021
