@@ -226,3 +226,16 @@ GPL-2.0, the license of LAMMPS (see `LICENSE`).
 4. Z. Chai, M. de Person, P. A. Buffet, M. Franco, G. E. Karniadakis.
    Quantifying the biophysical properties of red blood cells in Gaucher
    disease. Biophys. J. (2026). https://doi.org/10.1016/j.bpj.2026.10.021
+
+Preprints:
+
+5. J. D. Toscano, Z. Chai, G. E. Karniadakis. GRAFT-ATHENA: Self-improving
+   agentic teams for autonomous discovery and evolutionary numerical
+   algorithms. arXiv:2605.11117 (2026). https://arxiv.org/abs/2605.11117
+6. Z. Chai, J. Zheng, H. Li, M. Dao, G. E. Karniadakis. Quantifying
+   reticulocyte biomechanics in health and disease. arXiv:2607.21810 (2026).
+   https://arxiv.org/abs/2607.21810
+7. Z. Chai, J. Zheng, H. Li, M. Dao, G. E. Karniadakis. The typical red cell
+   makes too little vacuole material for coalescence to build the large
+   vacuoles of pocked cells. arXiv:2610.22646 (2026).
+   https://arxiv.org/abs/2610.22646
