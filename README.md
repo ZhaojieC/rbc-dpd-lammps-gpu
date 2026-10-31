@@ -11,6 +11,9 @@ The same model for CPUs with MPI is in
 [rbc-dpd-lammps](https://github.com/ZhaojieC/rbc-dpd-lammps). Both
 repositories have the same input files.
 
+If you use this code, please cite
+[Chai et al., Biophys. J. (2026)](https://doi.org/10.1016/j.bpj.2026.10.021).
+
 <p align="center"><img src="docs/slit.gif" width="640" alt="A red cell passing through a slit"></p>
 
 ## Contents
