@@ -7,6 +7,9 @@ Atom types used by all examples:
 
 Only numpy is needed.  The examples import this file through
 sys.path, so it can stay in tools/.
+
+If you use this code, please cite Z. Chai et al., Biophys. J. (2026),
+https://doi.org/10.1016/j.bpj.2026.10.021.
 """
 
 import os

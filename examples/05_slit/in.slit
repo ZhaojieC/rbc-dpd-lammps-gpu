@@ -8,6 +8,11 @@
 #   python3 make_data.py
 #   lmp -k on g 1 -sf kk -pk kokkos newton on neigh half -in in.slit
 #   python3 analyze.py
+#
+# If you use this model, please cite Z. Chai et al., Biophys. J. (2026),
+# https://doi.org/10.1016/j.bpj.2026.10.021.  LAMMPS prints the articles
+# to cite at the end of the run and puts their BibTeX entries in the log
+# file.
 
 variable        f index 40                        # force per vertex (500 vertices)
 variable        boost index 3                     # the force grows to boost x f at the slit

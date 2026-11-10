@@ -3,6 +3,12 @@
    https://github.com/ZhaojieC/rbc-dpd-lammps
    Distributed under the GNU General Public License, version 2.
 
+   If you use this code, please cite Z. Chai, M. de Person, P. A. Buffet,
+   M. Franco and G. E. Karniadakis, Biophys. J. (2026),
+   https://doi.org/10.1016/j.bpj.2026.10.021.  LAMMPS prints this
+   reminder at the end of a run and writes the BibTeX entries to the
+   log file (see rbc_cite.h).
+
    Area and volume constraints of a triangulated cell membrane (Fedosov,
    Caswell and Karniadakis, Biophys. J. 98, 2215 (2010)).  Each angle is
    one triangle of the mesh, listed counterclockwise when seen from
@@ -30,6 +36,7 @@
 #include "force.h"
 #include "memory.h"
 #include "neighbor.h"
+#include "rbc_cite.h"
 #include "rbc_reference.h"
 
 #include <cmath>
@@ -44,6 +51,8 @@ AngleAreaVolume::AngleAreaVolume(LAMMPS *_lmp) :
     ref(nullptr), maxmol(-1), celltype(nullptr), nmolatoms(nullptr), com(nullptr), area(nullptr),
     volume(nullptr), buf1(nullptr), buf2(nullptr)
 {
+  rbc_cite(lmp, true);    // the articles to cite, printed after the run
+
   // the volume term is not a sum of per-triangle virials
   centroidstressflag = CENTROID_NOTAVAIL;
 

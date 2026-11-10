@@ -3,6 +3,12 @@
    https://github.com/ZhaojieC/rbc-dpd-lammps
    Distributed under the GNU General Public License, version 2.
 
+   If you use this code, please cite Z. Chai, M. de Person, P. A. Buffet,
+   M. Franco and G. E. Karniadakis, Biophys. J. (2026),
+   https://doi.org/10.1016/j.bpj.2026.10.021.  LAMMPS prints this
+   reminder at the end of a run and writes the BibTeX entries to the
+   log file (see rbc_cite.h).
+
    WLC-POW spring of the RBC spectrin network (Fedosov, Caswell and
    Karniadakis, Biophys. J. 98, 2215 (2010)).  Rewritten for current
    LAMMPS from the rbc branch of bond style break/ligand in the in-house
@@ -29,6 +35,7 @@
 #include "force.h"
 #include "memory.h"
 #include "neighbor.h"
+#include "rbc_cite.h"
 #include "rbc_reference.h"
 #include "update.h"
 
@@ -41,6 +48,8 @@ using namespace LAMMPS_NS;
 BondWLCPOW::BondWLCPOW(LAMMPS *_lmp) :
     Bond(_lmp), ratio(nullptr), mu0(nullptr), expo(nullptr), ref(nullptr)
 {
+  rbc_cite(lmp, true);    // the articles to cite, printed after the run
+
   // the per-atom data compute() reads and writes (with KOKKOS, these are
   // copied between device and host every step)
   datamask_read = X_MASK | F_MASK | TAG_MASK;

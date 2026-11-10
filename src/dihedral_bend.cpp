@@ -3,6 +3,12 @@
    https://github.com/ZhaojieC/rbc-dpd-lammps
    Distributed under the GNU General Public License, version 2.
 
+   If you use this code, please cite Z. Chai, M. de Person, P. A. Buffet,
+   M. Franco and G. E. Karniadakis, Biophys. J. (2026),
+   https://doi.org/10.1016/j.bpj.2026.10.021.  LAMMPS prints this
+   reminder at the end of a run and writes the BibTeX entries to the
+   log file (see rbc_cite.h).
+
    Bending energy between two neighboring triangles of the membrane mesh
    (Fedosov, Caswell and Karniadakis, Biophys. J. 98, 2215 (2010)):
 
@@ -24,6 +30,7 @@
 #include "math_const.h"
 #include "memory.h"
 #include "neighbor.h"
+#include "rbc_cite.h"
 
 #include <cmath>
 
@@ -38,6 +45,8 @@ static constexpr double SMALL = 0.001;
 DihedralBend::DihedralBend(LAMMPS *_lmp) :
     Dihedral(_lmp), k(nullptr), theta0(nullptr), cos0(nullptr), sin0(nullptr)
 {
+  rbc_cite(lmp, true);    // the articles to cite, printed after the run
+
   // the per-atom data compute() reads and writes (with KOKKOS, these are
   // copied between device and host every step)
   datamask_read = X_MASK | F_MASK;
