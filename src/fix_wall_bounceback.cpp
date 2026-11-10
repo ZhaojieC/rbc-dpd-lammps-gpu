@@ -3,6 +3,12 @@
    https://github.com/ZhaojieC/rbc-dpd-lammps
    Distributed under the GNU General Public License, version 2.
 
+   If you use this code, please cite Z. Chai, M. de Person, P. A. Buffet,
+   M. Franco and G. E. Karniadakis, Biophys. J. (2026),
+   https://doi.org/10.1016/j.bpj.2026.10.021.  LAMMPS prints this
+   reminder at the end of a run and writes the BibTeX entries to the
+   log file (see rbc_cite.h).
+
    Bounce-back (no-slip) reflection of particles at solid walls made of
    axis-aligned blocks.  Replaces fix bc/bbarb of the in-house code
    lmp_rbc (contributing author Igor Pivkin).
@@ -38,6 +44,7 @@
 #include "domain.h"
 #include "error.h"
 #include "group.h"
+#include "rbc_cite.h"
 #include "update.h"
 
 #include <cmath>
@@ -62,6 +69,8 @@ static double bound(const char *str, LAMMPS *lmp)
 FixWallBounceback::FixWallBounceback(LAMMPS *_lmp, int narg, char **arg) :
     Fix(_lmp, narg, arg), nblock(0), slipbit(0), rround(0.0), nbounce(0.0), nfallback(0.0)
 {
+  rbc_cite(lmp, false);    // the articles to cite, printed after the run
+
   vector_flag = 1;
   size_vector = 2;
   global_freq = 1;

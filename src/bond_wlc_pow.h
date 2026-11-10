@@ -2,6 +2,12 @@
    RBC membrane model for LAMMPS
    https://github.com/ZhaojieC/rbc-dpd-lammps
    Distributed under the GNU General Public License, version 2.
+
+   If you use this code, please cite Z. Chai, M. de Person, P. A. Buffet,
+   M. Franco and G. E. Karniadakis, Biophys. J. (2026),
+   https://doi.org/10.1016/j.bpj.2026.10.021.  LAMMPS prints this
+   reminder at the end of a run and writes the BibTeX entries to the
+   log file (see rbc_cite.h).
 ------------------------------------------------------------------------- */
 
 #ifdef BOND_CLASS

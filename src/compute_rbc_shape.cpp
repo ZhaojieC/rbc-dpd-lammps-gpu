@@ -3,6 +3,12 @@
    https://github.com/ZhaojieC/rbc-dpd-lammps
    Distributed under the GNU General Public License, version 2.
 
+   If you use this code, please cite Z. Chai, M. de Person, P. A. Buffet,
+   M. Franco and G. E. Karniadakis, Biophys. J. (2026),
+   https://doi.org/10.1016/j.bpj.2026.10.021.  LAMMPS prints this
+   reminder at the end of a run and writes the BibTeX entries to the
+   log file (see rbc_cite.h).
+
    compute ID all rbc/shape
 
    Global array with one row per molecule ID (row N = molecule N):
@@ -20,6 +26,7 @@
 #include "force.h"
 #include "math_const.h"
 #include "memory.h"
+#include "rbc_cite.h"
 #include "update.h"
 
 #include <cmath>
@@ -32,6 +39,8 @@ using MathConst::MY_PI;
 ComputeRBCShape::ComputeRBCShape(LAMMPS *_lmp, int narg, char **arg) :
     Compute(_lmp, narg, arg), nrows(0), data(nullptr), av(nullptr)
 {
+  rbc_cite(lmp, false);    // the articles to cite, printed after the run
+
   if (narg != 3) error->all(FLERR, "Illegal compute rbc/shape command");
   if (!atom->molecule_flag) error->all(FLERR, "Compute rbc/shape requires molecule IDs");
 
